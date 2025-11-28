@@ -1,4 +1,5 @@
 QT += qml quick widgets sql quickcontrols2
+CONFIG+=sdk_no_version_check
 TARGET = cool-retro-term 
 
 DESTDIR = $$OUT_PWD/../

@@ -10,6 +10,7 @@
 
 #include <QDebug>
 #include <stdlib.h>
+#include <locale.h>
 
 #include <QFontDatabase>
 #include <QLoggingCategory>
@@ -26,6 +27,17 @@ QString getNamedArgument(QStringList args, QString name, QString defaultName)
 QString getNamedArgument(QStringList args, QString name)
 {
     return getNamedArgument(args, name, "");
+}
+
+// This function is guaranteed to run BEFORE the main() function.
+// It runs during the C Runtime Startup (csu) phase.
+__attribute__((constructor))
+static void set_macos_locale_pre_main() {
+    // 1. Set the environment variable. The '1' ensures it overwrites any existing value.
+    setenv("LC_CTYPE", "UTF-8", 1);
+    // 2. Refresh the C standard library's internal locale state.
+    // This makes the UTF-8 setting immediately active for underlying system calls.
+    setlocale(LC_CTYPE, "");
 }
 
 int main(int argc, char *argv[])

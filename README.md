@@ -1,3 +1,12 @@
+# About this fork
+
+Previously the project has not been in active development for 3 years. This is the tyoubin's fork, an attempt of reviving this application.
+
+## Fixed
+
+- Application hangs when pressing Command + Q or closing the window on arm64 macOS
+- Special characters not rendering on arm64 macOS
+
 # cool-retro-term
 
 |> Default Amber|C:\ IBM DOS|$ Default Green|

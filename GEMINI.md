@@ -95,3 +95,8 @@ Several build warnings were identified and addressed:
     -   **Solution**: Removed the blocking call to `_shellProcess->waitForFinished()` from `Session::sendSignal()` in `qmltermwidget/lib/Session.cpp`. This allows the application to rely on the asynchronous `finished()` signal of the shell process for proper cleanup, preventing the hang.
     -   **Build Issue During Fix**: After modifying `Session.cpp`, a build error occurred due to `qmake` caching an outdated absolute path (`cool-retro-term-reloaded`) for copying `color-schemes` and `kb-layouts`.
     -   **Build Issue Resolution**: Performed a `make clean` in the `qmltermwidget` directory, followed by a full `make clean` for the entire project, and then `qmake -r cool-retro-term.pro && make`. This forced `qmake` to regenerate all Makefiles with correct paths, successfully resolving the build issue.
+
+## Bug Fixes (2025-11-29)
+
+- Fix: Special chars not rendering on arm64 macOS
+    - Adds a constructor function to set the LC_CTYPE environment variable to UTF-8 and refresh locale state before main() runs. This ensures proper UTF-8 handling for system calls on arm64 macOS.

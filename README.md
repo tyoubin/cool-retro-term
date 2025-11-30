@@ -41,6 +41,9 @@ Check out the wiki and follow the instructions on how to build it on [Linux](htt
 
 ### macOS
 
+0. Install Qt 5 via [Homebrew](https://brew.sh/)
+	- `brew install qt@5`
+	- add Qt 5's `bin` directory to your `$PATH` per Homebrew's Caveats message
 1. Clone the codebase
 	- `git clone --recursive https://github.com/tyoubin/cool-retro-term.git`
 2. Go to the directory and compile

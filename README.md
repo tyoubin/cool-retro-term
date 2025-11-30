@@ -46,8 +46,5 @@ Check out the wiki and follow the instructions on how to build it on [Linux](htt
 2. Go to the directory and compile
 	- `cd cool-retro-term`
 	- `qmake -config release`
-	- `make -j10`
-3. Copy the qmltermwidget dependency
-	- `mkdir cool-retro-term.app/Contents/PlugIns`
-	- `cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns`
-4. Optionally drag cool-retro-term to the `/Application` folder
+	- `make -j$(sysctl -n hw.ncpu)`
+3. Optionally drag cool-retro-term to the `/Application` folder

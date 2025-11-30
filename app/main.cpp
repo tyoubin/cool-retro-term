@@ -9,8 +9,8 @@
 #include <QQuickStyle>
 
 #include <QDebug>
-#include <stdlib.h>
-#include <locale.h>
+#include <clocale> // Required for setlocale
+#include <cstdlib> // Required for setenv
 
 #include <QFontDatabase>
 #include <QLoggingCategory>
@@ -29,17 +29,6 @@ QString getNamedArgument(QStringList args, QString name)
     return getNamedArgument(args, name, "");
 }
 
-// This function is guaranteed to run BEFORE the main() function.
-// It runs during the C Runtime Startup (csu) phase.
-__attribute__((constructor))
-static void set_macos_locale_pre_main() {
-    // 1. Set the environment variable. The '1' ensures it overwrites any existing value.
-    setenv("LC_CTYPE", "UTF-8", 1);
-    // 2. Refresh the C standard library's internal locale state.
-    // This makes the UTF-8 setting immediately active for underlying system calls.
-    setlocale(LC_CTYPE, "");
-}
-
 int main(int argc, char *argv[])
 {
     // Some environmental variable are necessary on certain platforms.
@@ -55,8 +44,17 @@ int main(int argc, char *argv[])
 #endif
 
 #if defined(Q_OS_MAC)
-    // This allows UTF-8 characters usage in OSX.
+    // Fix for macOS Apple Silicon/ARM64:
+    // macOS app bundles often launch with a generic "C" locale, breaking UTF-8.
+    
+    // 1. Force the environment variable (so the spawned shell inherits it)
     setenv("LC_CTYPE", "UTF-8", 1);
+    
+    // 2. Update Qt's internal environment (redundant safety)
+    qputenv("LC_CTYPE", "UTF-8");
+    
+    // 3. Apply the locale to the running process immediately (fixes rendering)
+    setlocale(LC_CTYPE, "UTF-8");
 #endif
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {

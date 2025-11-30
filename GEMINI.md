@@ -127,3 +127,7 @@ Several build warnings were identified and addressed:
 ## Better Build Pipeline (2025-11-30)
 
 - Simplified build process by specifying macOS specific instructions in `app/app.pro`
+
+## Improved Code Quality (2025-11-30)
+
+- Used a safer and standard practice to implement the chars rendering fix in `main()`

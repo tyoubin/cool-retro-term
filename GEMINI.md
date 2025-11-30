@@ -100,3 +100,7 @@ Several build warnings were identified and addressed:
 
 - Fix: Special chars not rendering on arm64 macOS
     - Adds a constructor function to set the LC_CTYPE environment variable to UTF-8 and refresh locale state before main() runs. This ensures proper UTF-8 handling for system calls on arm64 macOS.
+
+## Better Build Pipeline (2025-11-29)
+
+- Simplified build process by specifying macOS specific instructions in `app/app.pro`

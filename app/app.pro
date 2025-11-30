@@ -37,3 +37,23 @@ unix {
 
     INSTALLS += icon32 icon64 icon128 icon256
 }
+
+macx {
+    # 1. Define source (Go up one level from app/ to find qmltermwidget)
+    QML_SRC = $$PWD/../qmltermwidget/QMLTermWidget
+
+    # 2. Define Destination
+    # If DESTDIR is set (e.g. ".."), use it. Otherwise default to current build dir.
+    isEmpty(DESTDIR) {
+        APP_BUNDLE = $$OUT_PWD/$${TARGET}.app
+    } else {
+        APP_BUNDLE = $$DESTDIR/$${TARGET}.app
+    }
+
+    # 3. Create the copy command
+    # We use $(MKDIR) which translates to 'mkdir -p' in the Makefile
+    copy_qml.commands = $(MKDIR) $$APP_BUNDLE/Contents/PlugIns && cp -r $$QML_SRC $$APP_BUNDLE/Contents/PlugIns/
+
+    # 4. Trigger after linking
+    QMAKE_POST_LINK += $$copy_qml.commands
+}

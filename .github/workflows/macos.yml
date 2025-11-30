@@ -1,0 +1,48 @@
+name: macOS Build
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Qt 5
+        run: |
+          brew install qt@5
+          echo "$(brew --prefix qt@5)/bin" >> $GITHUB_PATH
+
+      - name: Compile
+        run: |
+          qmake -r
+          make -j$(sysctl -n hw.ncpu)
+
+      - name: Create DMG
+        run: |
+          # 1. Bundle frameworks (scans . for all QML files)
+          # 2. Fix the split-brain plugin issue explicitly with -executable
+          macdeployqt cool-retro-term.app \
+            -dmg \
+            -verbose=1 \
+            -qmldir=. \
+            -executable=cool-retro-term.app/Contents/PlugIns/QMLTermWidget/libQMLTermWidget.dylib
+
+      - name: Sign Bundle (Ad-hoc)
+        run: |
+          find cool-retro-term.app/Contents/Frameworks -name "*.framework" -prune -exec codesign --force --sign - --preserve-metadata=identifier,entitlements "{}" \;
+          find cool-retro-term.app/Contents/PlugIns -name "*.dylib" -exec codesign --force --sign - --preserve-metadata=identifier,entitlements "{}" \;
+          codesign --force --sign - --deep cool-retro-term.app
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CoolRetroTerm-macOS
+          path: cool-retro-term.dmg

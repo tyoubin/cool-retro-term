@@ -1,11 +1,34 @@
 # INSTRUCTIONS TO GEMINI:
 
-- Check recent git history to understand what's happening.
 - Log any important changes by appending to this file. Do not delete old content of this file.
-- remember to track changes using git commit.
 - The Qt is installed at `/opt/homebrew/opt/qt@5`
 - This repo is at path `~/Applications/cool-retro-term`
 - This repo contains a submodule `qmltermwidget` 
+
+## Git Workflow Protocol
+
+### Repository Architecture
+- **Main Repo:** `tyoubin/cool-retro-term` (Branch: `master`)
+- **Submodule:** `tyoubin/qmltermwidget` (Branch: `master`)
+
+### The "Submodule Dance" (Critical)
+**Rule:** When changing code inside the `qmltermwidget` folder, you must push the submodule **FIRST**, or the build will break for others (Ghost Commit).
+
+#### Phase 1: Update Submodule
+1. Enter directory: `cd qmltermwidget`
+2. Ensure branch: `git checkout master`
+3. Make changes and commit: `git commit -am "Fix logic"`
+4. **PUSH:** `git push origin master`
+
+#### Phase 2: Update Main Repo
+1. Go to root: `cd ..`
+2. Stage the pointer change: `git add qmltermwidget`
+3. Commit: `git commit -m "Update submodule"`
+4. **PUSH:** `git push origin master`
+
+### Pulling Changes
+To update your local machine with changes from GitHub, always pull recursively:
+`git pull --recurse-submodules`
 
 END OF INSTRUCTIONS TO GEMINI.
 
@@ -101,6 +124,6 @@ Several build warnings were identified and addressed:
 - Fix: Special chars not rendering on arm64 macOS
     - Adds a constructor function to set the LC_CTYPE environment variable to UTF-8 and refresh locale state before main() runs. This ensures proper UTF-8 handling for system calls on arm64 macOS.
 
-## Better Build Pipeline (2025-11-29)
+## Better Build Pipeline (2025-11-30)
 
 - Simplified build process by specifying macOS specific instructions in `app/app.pro`

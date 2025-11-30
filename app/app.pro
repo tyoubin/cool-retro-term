@@ -2,6 +2,10 @@ QT += qml quick widgets sql quickcontrols2
 CONFIG+=sdk_no_version_check
 TARGET = cool-retro-term 
 
+# Force Release mode by default
+CONFIG += release
+CONFIG -= debug
+
 DESTDIR = $$OUT_PWD/../
 
 HEADERS += \

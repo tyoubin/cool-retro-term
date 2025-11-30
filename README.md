@@ -14,6 +14,7 @@ Previously the project has not been in active development for 3 years. This is t
 |![Default Amber Cool Retro Term](https://user-images.githubusercontent.com/121322/32070717-16708784-ba42-11e7-8572-a8fcc10d7f7d.gif)|![IBM DOS](https://user-images.githubusercontent.com/121322/32070716-16567e5c-ba42-11e7-9e64-ba96dfe9b64d.gif)|![Default Green Cool Retro Term](https://user-images.githubusercontent.com/121322/32070715-163a1c94-ba42-11e7-80bb-41fbf10fc634.gif)|
 
 ## Description
+
 cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
@@ -30,9 +31,7 @@ Settings such as colors, fonts, and effects can be accessed via context menu.
 
 ## Install
 
-If you want to get a hold of the latest version, just go to the Releases page and grab the latest AppImage (Linux) or dmg (macOS).
-
-Alternatively, most distributions such as Ubuntu, Fedora or Arch already package cool-retro-term in their official repositories.
+Most distributions such as Ubuntu, Fedora or Arch already package the original cool-retro-term in their official repositories.
 
 ## Building
 

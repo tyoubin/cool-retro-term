@@ -42,9 +42,15 @@ jobs:
           
           # Sign the main application last
           codesign --force --sign - --deep cool-retro-term.app
+      
+      - name: Prepare Artifact
+        run: |
+          # create a staging directory so the zip contains the .app folder, not just its contents
+          mkdir release
+          mv cool-retro-term.app release/
 
       - name: Upload App
         uses: actions/upload-artifact@v4
         with:
           name: CoolRetroTerm-macOS
-          path: cool-retro-term.app
+          path: release/

@@ -1,4 +1,4 @@
 [submodule "qmltermwidget"]
 	path = qmltermwidget
 	url = https://github.com/tyoubin/qmltermwidget
-	branch = unstable
+	branch = master

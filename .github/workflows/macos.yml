@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-macos:
-    # Use a matrix to run two jobs: one on ARM64 (latest) and one on Intel (13)
+    # Use a matrix to run two jobs: one on ARM64 (latest) and one on Intel (macOS 15)
     strategy:
       matrix:
         include:
@@ -62,8 +62,5 @@ jobs:
       - name: Upload App
         uses: actions/upload-artifact@v4
         with:
-          # This generates two zip files:
-          # 1. CoolRetroTerm-macOS-arm64.zip
-          # 2. CoolRetroTerm-macOS-amd64.zip
-          name: CoolRetroTerm-macOS-${{ matrix.name }}
+          name: cool-retr-term-macOS-${{ matrix.name }}
           path: release/

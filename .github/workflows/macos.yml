@@ -26,9 +26,10 @@ jobs:
           submodules: recursive
 
       - name: Install Qt 5
-        run: |
-          brew install qt@5
-          echo "$(brew --prefix qt@5)/bin" >> $GITHUB_PATH
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '5.15.2'
+          host: 'mac'
 
       - name: Compile
         run: |

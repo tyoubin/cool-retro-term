@@ -48,6 +48,6 @@ Check out the wiki and follow the instructions on how to build it on [Linux](htt
 	- `git clone --recursive https://github.com/tyoubin/cool-retro-term.git`
 2. Go to the directory and compile
 	- `cd cool-retro-term`
-	- `qmake -config release`
+	- `qmake -r`
 	- `make -j$(sysctl -n hw.ncpu)`
 3. Optionally drag cool-retro-term to the `/Application` folder

@@ -4,7 +4,7 @@ Previously the project has not been in active development for 3 years. This is t
 
 ## Fixed
 
-- Application hangs when pressing Command + Q or closing the window on arm64 macOS
+- Application hangs when pressing Command + Q or closing the window on macOS
 - Special characters not rendering on arm64 macOS
 
 # cool-retro-term

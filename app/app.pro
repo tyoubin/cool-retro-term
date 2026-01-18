@@ -1,4 +1,7 @@
 QT += qml quick widgets sql quickcontrols2
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+}
 CONFIG+=sdk_no_version_check
 TARGET = cool-retro-term 
 

@@ -3,7 +3,9 @@
 - Log any important changes by appending to this file. Do not delete old content of this file.
 - The Qt 5 and 6 is installed at `/opt/homebrew/Cellar/qt@5/` and `/opt/homebrew/Cellar/qt/`
 - This repo is at path `~/Applications/GitHub/cool-retro-term`
-- This repo contains a submodule `qmltermwidget`
+- This repo contains a submodule `qmltermwidget`.
+- In the Qt 6 migration plan, the submodule will be replaced by `qtermwidget` which is maintained by lxqt. Do not modify this upstream source code directly.
+- `qtermwidget` is the active developed upstream. We are deprecating `qmltermwidget` during Qt 6 migration.
 - Follow the KISS principle. You are encouraged to correct the user if industrial best practices have better to offer.
 
 # Project Overview
@@ -53,7 +55,6 @@ Gemini's initial analysis of the project has identified several key areas for im
 Based on user feedback, the following decisions were made regarding outdated components:
 -   **Build Environment (Travis CI)**: The user requested to **not touch** this part.
 -   **Qt Version**: The user specified to use **Qt 5, not 6**. The project was successfully built using the provided Qt 5.15.18, which aligns with this requirement. While there were warnings about the SDK version during compilation, the build completed successfully, confirming Qt 5.15 LTS is effectively in use.
--   **`qmltermwidget` Submodule**: The user requested **not to use** the latest `qmltermwidget` but instead use the user's fork, citing incompatibility issues with Qt 6.
 
 ## Build Warnings Addressed (2025-11-28)
 

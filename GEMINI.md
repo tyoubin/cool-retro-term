@@ -1,7 +1,7 @@
 # INSTRUCTIONS TO GEMINI:
 
 - Log any important changes by appending to this file. Do not delete old content of this file.
-- The Qt 5 and 6 is installed at `/opt/homebrew/opt/qt@5` and `/opt/homebrew/Cellar/qt/`
+- The Qt 5 and 6 is installed at `/opt/homebrew/Cellar/qt@5/` and `/opt/homebrew/Cellar/qt/`
 - This repo is at path `~/Applications/GitHub/cool-retro-term`
 - This repo contains a submodule `qmltermwidget` 
 

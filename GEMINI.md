@@ -129,3 +129,7 @@ Several build warnings were identified and addressed:
 **Rationale:** This fork is focused on macOS development. Linux support has been deprecated to simplify the codebase and focus development efforts.
 
 **Note:** The `qmltermwidget` submodule was NOT modified per user request, as it may be synced with upstream in the future.
+
+## Update GUI to feel more native (2026-01-18)
+
+Updated the cool-retro-term GUI to feel more native on macOS ("menus, controls, etc") and use Qt5 transitional features (Qt.labs.platform) to ease the path to Qt6.

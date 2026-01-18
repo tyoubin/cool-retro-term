@@ -1,96 +1,52 @@
-# Detailed Feasibility Analysis, Potential Challenges, and Recommended Implementation Path for Porting to Qt 6
+**Context:**
+I need to port the `cool-retro-term` application from Qt5 to Qt6. The original project relies on a heavily modified, unmaintained fork of `qmltermwidget`.
 
-## 1. Feasibility Analysis: Why Is This Possible?
+**Strategic Decision:** Instead of porting the old fork, I want to switch to the active, upstream **LXQt `qmltermwidget` (master branch)** to ensure future maintainability. I am willing to sacrifice non-core features (like baud rate simulation or specific font tweaks) temporarily to achieve a stable build.
 
-### Qt 5 to Qt 6 Compatibility  
-Qt 6 does not completely abandon the design philosophy of Qt 5. For the C++ APIs (which form the core of `qmltermwidget`), most changes involve class replacements (for example, `QRegExp` → `QRegularExpression`) and the removal of deprecated interfaces.
+**Action Required: Complete Submodule Replacement**
 
-### Evolution of QML  
-Cool-Retro-Term is a QML-heavy application. Qt 6 provides a more performant QML engine and includes the `Qt5Compat` module to assist with transitioning legacy graphical effects (Graphical Effects). This is critically important for a Cool-Retro-Term-style application that relies heavily on visual effects.
+Before writing any code, we must switch the underlying dependency to the upstream version. Please perform the following Git and file system operations:
 
-### Upstream Status  
-The upstream `qmltermwidget` (primarily maintained by the LXQt team) has already been migrated to Qt 6. This demonstrates that the core logic of the library can operate correctly under Qt 6—the path has already been validated.
+1.  **Remove the Old Submodule:**
+    *   De-initialize and remove the existing `qmltermwidget` submodule (the old fork) from the git repository.
+    *   Delete the corresponding directory and clean up `.gitmodules`.
 
----
+2.  **Add the New Submodule:**
+    *   Add the upstream repository `https://github.com/lxqt/qmltermwidget.git` as a new submodule at the path `qmltermwidget`.
+    *   **Important:** Checkout the `master` branch.
 
-## 2. Main Difficulties and Challenges
+3.  **Update Build Configuration:**
+    *   Modify the root `cool-retro-term.pro` (or `CMakeLists.txt`) to include the *new* submodule file structure.
+    *   *Note:* The file names and folder structure in the LXQt version will differ from the old fork. Do not try to compile yet, just ensure the build system points to the new paths (e.g., look for `qmltermwidget.pro` or `CMakeLists.txt` inside the new directory).
 
-During the porting process, you will mainly encounter obstacles at three levels:
+**Expectation:** The project will *not* compile after this step. This is expected. We will fix the API breakages in the next phase.
 
-### A. The “Fork” Problem of QmlTermWidget (Most Critical)
+**Task:**
+Please execute the porting process following these specific phases:
 
-The author of Cool-Retro-Term (Swordfish90) originally forked this component for practical reasons, not experimentation—the upstream version lacked features required by Cool-Retro-Term.
+**Phase 1: Proof of Concept (Shader Compatibility Check)**
+1.  Set up a new Qt6 environment including `Qt6::Core5Compat` and `Qt6::Quick`.
+2.  Compile the upstream LXQt `qmltermwidget` as a library.
+3.  Create a minimal "Hello World" QML application that instantiates the upstream `QmlTermWidget`.
+4.  **Critical Step:** Verify if the widget can serve as a `source` for a `ShaderEffect` or `ShaderEffectSource`. Apply a basic shader (e.g., a simple blur or color inversion) to the terminal widget to confirm that Qt6 RHI (Rendering Hardware Interface) handles the texture correctly.
 
-- **What was modified?**  
-  The fork may expose specific C++ interfaces to QML, modify font rendering logic, or heavily customize the rendering loop for performance reasons.
-- **Conflicts:**  
-  The upstream (LXQt) version may have undergone structural refactoring during its Qt 6 migration.
-- **Decision:**  
-  Directly adopting the current upstream Qt 6 version is difficult. The safest approach is to take the older fork bundled with Cool-Retro-Term and manually upgrade it to Qt 6, rather than attempting to merge upstream changes.
+**Phase 2: The Adapter Layer (C++)**
+1.  Do not modify the upstream `qmltermwidget` source code directly.
+2.  Create a wrapper class (e.g., `CRTermWidget`) in the main project that inherits from the upstream widget.
+3.  Implement an **Adapter Pattern**: Expose the properties and signals expected by `cool-retro-term`'s existing QML (e.g., font handling, color schemes) and map them to the new upstream APIs inside this wrapper.
+4.  Stub out (leave empty) any complex legacy functions that don't have direct upstream equivalents for now.
 
-### B. Rendering Pipeline and Shaders
+**Phase 3: QML Migration & Core Functionality**
+1.  Update the project's build system (CMake/QMake) to link against the upstream library.
+2.  Replace usages of the old `QTerminal` imports with the new wrapper class in the QML files.
+3.  Replace obsolete Qt5 imports:
+    *   Change `import QtGraphicalEffects` to `import Qt5Compat.GraphicalEffects`.
+    *   Remove `QtQuick.Controls 1.x` and migrate basic controls to `QtQuick.Controls 2` or `Basic`.
+4.  Comment out non-essential features in the QML (custom scrollbars, settings menus regarding performance hacks) to get the application to launch.
 
-This is the soul of Cool-Retro-Term. The application relies heavily on shaders to simulate glow, scanlines, dithering, and curved screens.
+**Phase 4: Verification**
+1.  Ensure the application launches without crashing.
+2.  Verify basic terminal Input/Output works.
+3.  Verify the retro visual effects (Shaders) are rendering over the terminal window.
 
-- **Qt 5:** Uses OpenGL (GLSL).
-- **Qt 6:** Introduces RHI (Rendering Hardware Interface), abstracting underlying graphics APIs (Vulkan, Metal, Direct3D, OpenGL).
-
-**Issues:**  
-Although Qt 6 still supports GLSL, the official recommendation is to use the `qsb` tool to compile shaders into an intermediate format. If Cool-Retro-Term uses `ShaderEffect`, you may need to introduce the `Qt5Compat.GraphicalEffects` module, or—if higher performance is required—rewrite parts of the shader loading logic according to Qt 6’s new standards.
-
-### C. C++ API Changes
-
-`qmltermwidget` is derived from modified KDE Konsole code.
-
-- **Character Encoding:**  
-  Qt 6 significantly reworked character encoding handling (removing parts of `QTextCodec` and relying mainly on `QStringConverter`). Terminal emulators are highly sensitive to encoding changes, so this area requires careful modification.
-- **Containers and Algorithms:**  
-  Some Qt container classes have subtle behavioral changes.
-
----
-
-## 3. Recommended Implementation Roadmap
-
-### Phase 1: Environment Preparation and Dependency Upgrades
-
-- **Create a branch:**  
-  Create a `qt6-port` branch in the Cool-Retro-Term repository.
-- **Introduce Qt6Core5Compat:**  
-  Add `Qt6::Core5Compat` and `Qt6::Qml5Compat` to your CMake/QMake files. These act as a “lifeline” when porting legacy projects.
-
-### Phase 2: Porting `qmltermwidget` (C++ Layer)
-
-This is the most tedious step.
-
-- Enter the `qmltermwidget` directory.
-- Modify the build system (`.pro` or `CMakeLists.txt`) to support Qt 6.
-- Compile and fix errors:
-  - Replace `QRegExp` with `QRegularExpression`.
-  - Fix `QAction` header includes (moved to `QtGui`).
-  - Adjust High-DPI handling (Qt 6 enables High-DPI by default; legacy manual handling code may need removal).
-  - Handle deprecated `QTextCodec` APIs.
-- Ensure the component builds successfully and produces a shared or static library.
-
-### Phase 3: Porting Cool-Retro-Term (QML Layer)
-
-- **Update imports:**  
-  Change `import QtQuick 2.x` to versionless `import QtQuick`.
-- **Handle Controls:**  
-  Check for usage of `QtQuick.Controls 1.x` (removed). If present, rewrite using Controls 2 or the Basic style.
-- **Fix effects:**  
-  This is the most critical step. Replace `import QtGraphicalEffects` with `import Qt5Compat.GraphicalEffects`.  
-  If the screen turns black or errors occur, inspect RHI settings and force the backend to OpenGL for debugging:QSG_RHI_BACKEND=opengl
-
-  ### Phase 4: Integration and Debugging
-
-- Link the ported `qmltermwidget` into the main application.
-- Run the program and focus on testing:
-- **Non-ASCII input/display** (handled by the C++ layer, prone to garbled text).
-- **Effect toggles** (shader-related, prone to crashes or black screens).
-- **Window scaling** (Qt 6 rendering changes may break legacy scaling logic).
-
----
-
-## 4. Conclusion and Recommendation
-
-Do not attempt to track upstream or adopt its complex new features. The primary goal should be simple and pragmatic: **make the existing Cool-Retro-Term run on Qt 6**.
+**Goal:** A running Qt6 version of cool-retro-term using unmodified upstream dependencies, even if some advanced settings are currently disabled.

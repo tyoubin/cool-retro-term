@@ -3,34 +3,8 @@
 - Log any important changes by appending to this file. Do not delete old content of this file.
 - The Qt 5 and 6 is installed at `/opt/homebrew/Cellar/qt@5/` and `/opt/homebrew/Cellar/qt/`
 - This repo is at path `~/Applications/GitHub/cool-retro-term`
-- This repo contains a submodule `qmltermwidget` 
-
-## Git Workflow Protocol
-
-### Repository Architecture
-- **Main Repo:** `tyoubin/cool-retro-term` (Branch: `master`)
-- **Submodule:** `tyoubin/qmltermwidget` (Branch: `master`)
-
-### The "Submodule Dance" (Critical)
-**Rule:** When changing code inside the `qmltermwidget` folder, you must push the submodule **FIRST**, or the build will break for others (Ghost Commit).
-
-#### Phase 1: Update Submodule
-1. Enter directory: `cd qmltermwidget`
-2. Ensure branch: `git checkout master`
-3. Make changes and commit: e.g. `git commit -am "Fix logic"`
-4. **PUSH:** `git push origin master`
-
-#### Phase 2: Update Main Repo
-1. Go up a level: `cd ..`
-2. Stage the pointer change: `git add qmltermwidget`
-3. Commit: `git commit -m "Update submodule"`
-4. **PUSH:** `git push origin master`
-
-### Pulling Changes
-To update your local machine with changes from GitHub, always pull recursively:
-`git pull --recurse-submodules`
-
-END OF INSTRUCTIONS TO GEMINI.
+- This repo contains a submodule `qmltermwidget`
+- Follow the KISS principle. You are encouraged to correct the user if industrial best practices have better to offer.
 
 # Project Overview
 

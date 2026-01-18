@@ -34,7 +34,7 @@ END OF INSTRUCTIONS TO GEMINI.
 
 # Project Overview
 
-`cool-retro-term` is a terminal emulator designed to mimic the look and feel of old cathode ray tube (CRT) screens. It is built using Qt and QML for the user interface and C++ for the backend logic. The project has not been in active development since 2022. This is the user's fork (`https://github.com/tyoubin/cool-retro-term`), an attempt of reviving this application.
+`cool-retro-term` is a terminal emulator designed to mimic the look and feel of old cathode ray tube (CRT) screens. It is built using Qt and QML for the user interface and C++ for the backend logic. The project has not been in active development since 2022. This is the user's fork (`https://github.com/tyoubin/cool-retro-term`), an attempt of reviving this application. **This fork is macOS-only.**
 
 ## Architecture Breakdown
 
@@ -123,3 +123,9 @@ Several build warnings were identified and addressed:
 ## Improved Code Quality (2025-11-30)
 
 - Implemented a safer and standard practice to implement the chars rendering fix in `main()`
+
+## Deprecation of Linux Support (2026-01-18)
+
+**Rationale:** This fork is focused on macOS development. Linux support has been deprecated to simplify the codebase and focus development efforts.
+
+**Note:** The `qmltermwidget` submodule was NOT modified per user request, as it may be synced with upstream in the future.

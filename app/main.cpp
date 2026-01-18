@@ -39,10 +39,6 @@ int main(int argc, char *argv[])
     // Disable Connections slot warnings
     QLoggingCategory::setFilterRules("qt.qml.connections.warning=false");
 
-#if defined (Q_OS_LINUX)
-    setenv("QSG_RENDER_LOOP", "threaded", 0);
-#endif
-
 #if defined(Q_OS_MAC)
     // Fix for macOS Apple Silicon/ARM64:
     // macOS app bundles often launch with a generic "C" locale, breaking UTF-8.
@@ -86,11 +82,7 @@ int main(int argc, char *argv[])
     FileIO fileIO;
     MonospaceFontManager monospaceFontManager;
 
-#if !defined(Q_OS_MAC)
-    app.setWindowIcon(QIcon::fromTheme("cool-retro-term", QIcon(":../icons/32x32/cool-retro-term.png")));
-#else
     app.setWindowIcon(QIcon(":../icons/32x32/cool-retro-term.png"));
-#endif
 
     app.setOrganizationName("cool-retro-term");
     app.setOrganizationDomain("cool-retro-term");
@@ -115,7 +107,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("devicePixelRatio", app.devicePixelRatio());
 
-    // Manage import paths for Linux and OSX.
+    // Manage import paths for macOS.
     QStringList importPathList = engine.importPathList();
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/qmltermwidget");
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/../PlugIns");

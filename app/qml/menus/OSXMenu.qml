@@ -28,6 +28,7 @@ MenuBar {
         title: qsTr("File")
         MenuItem {
             text: quitAction.text
+            role: MenuItem.QuitRole
             onTriggered: quitAction.trigger()
         }
     }
@@ -46,7 +47,7 @@ MenuBar {
         MenuSeparator {}
         MenuItem {
             text: showsettingsAction.text
-            shortcut: showsettingsAction.shortcut
+            role: MenuItem.PreferencesRole
             onTriggered: showsettingsAction.trigger()
         }
     }
@@ -83,6 +84,7 @@ MenuBar {
         title: qsTr("Help")
         MenuItem {
             text: showAboutAction.text
+            role: MenuItem.AboutRole
             onTriggered: showAboutAction.trigger()
         }
     }

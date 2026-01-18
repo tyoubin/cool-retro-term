@@ -39,6 +39,9 @@ int main(int argc, char *argv[])
     // Disable Connections slot warnings
     QLoggingCategory::setFilterRules("qt.qml.connections.warning=false");
 
+    // Use macOS style for controls if available
+    QQuickStyle::setStyle("macOS");
+
 #if defined(Q_OS_MAC)
     // Fix for macOS Apple Silicon/ARM64:
     // macOS app bundles often launch with a generic "C" locale, breaking UTF-8.

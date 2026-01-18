@@ -21,6 +21,7 @@ import QtQuick 2.2
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
+import Qt.labs.platform 1.1 as Platform
 
 ColumnLayout {
     GroupBox {
@@ -95,7 +96,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     text: qsTr("Import")
                     onClicked: {
-                        fileDialog.selectExisting = true
+                        fileDialog.fileMode = Platform.FileDialog.OpenFile
                         fileDialog.callBack = function (url) {
                             loadFile(url)
                         }
@@ -137,7 +138,7 @@ ColumnLayout {
                     enabled: currentIndex >= 0 && !appSettings.profilesList.get(
                                  currentIndex).builtin
                     onClicked: {
-                        fileDialog.selectExisting = false
+                        fileDialog.fileMode = Platform.FileDialog.SaveFile
                         fileDialog.callBack = function (url) {
                             storeFile(url)
                         }
@@ -241,28 +242,10 @@ ColumnLayout {
             messageDialog.close()
         }
     }
-    Loader {
-        property var callBack
-        property bool selectExisting: false
+    Platform.FileDialog {
         id: fileDialog
-
-        sourceComponent: FileDialog {
-            nameFilters: ["Json files (*.json)"]
-            selectMultiple: false
-            selectFolder: false
-            selectExisting: fileDialog.selectExisting
-            onAccepted: callBack(fileUrl)
-        }
-
-        onSelectExistingChanged: reload()
-
-        function open() {
-            item.open()
-        }
-
-        function reload() {
-            active = false
-            active = true
-        }
+        property var callBack
+        nameFilters: ["Json files (*.json)"]
+        onAccepted: callBack(file)
     }
 }

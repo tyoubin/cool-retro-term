@@ -1,8 +1,10 @@
 # About this fork
 
-Previously the project has not been in active development for 3 years. This is tyoubin's fork, an attempt at reviving this application.
+This **was** my attempt at reviving this application. As luck would have it, [the original author returned](https://github.com/Swordfish90/cool-retro-term) shortly after this fork was created, rendering this effort happily obsolete.
 
-> **Note**: This fork is **macOS-only**. Linux support has been deprecated.
+~~Previously the project has not been in active development for 3 years. This is tyoubin's fork, an attempt at reviving this application.~~
+
+~~> **Note**: This fork is **macOS-only**. Linux support has been deprecated.~~
 
 ## Fixed
 
